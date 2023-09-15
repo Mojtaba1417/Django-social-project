@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <a class="navbar-brand" href="{% url 'account:user_profile' post.user.id %}">Profile</a>
+    <h1>{{ post.title }}</h1>
+    <small>{{ post.created|date:"Y - M - D" }} --  {{ post.user }}</small>
+    <p>{{ post.body }}</p>
+    {% if request.user.id == post.user.id %}
+        <a href="{% url 'home:post_delete' post.id %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'home:post_update' post.id %}" class="btn btn-light">Update</a>
+    {% endif %}
+    <p>{{ comments.count }} comment</p>
+    {% for comment in comments %}
+        <div class="card bg-dark text-white">
+            <p class="card-header">{{ comment.user }} -- {{ comment.created|timesince }}</p>
+            <p class="card-body">{{ comment.body }}</p>
+        {% for reply in comment.rcomment.all %}
+            <p class="card-subtitle text-white bg-secondary p-3 m-2">
+                {{ reply.user }}  : {{ reply.created|timesince }}
+                <br>
+                {{ reply.body }}
+            </p>
+            {% endfor %}
+        </div>
+    {% empty %}
+        <p class="card bg-dark text-white">No Comment Yet</p>
+    {% endfor %}
+{% endblock %}

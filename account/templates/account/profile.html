@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if request.user.id != user.id %}
+        <a class="btn btn-light" href="{% url 'account:user_follow' user.id %}">Follow</a>
+    {% endif %}
+
+
+    {% for post in posts %}
+        <p><a href="{% url "home:post_detail" post.id post.slug %}">{{ post }}</a></p>
+        <small>{{ post.created|timesince }}</small>
+    {% endfor %}
+
+{% endblock %}
